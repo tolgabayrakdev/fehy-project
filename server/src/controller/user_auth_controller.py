@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from service.user_auth_service import UserAuthService
+from schema.user_schema import UserSchema
 
 user_auth_controller = Blueprint("user_auth_controller", __name__)
 
@@ -7,8 +8,17 @@ user_auth_controller = Blueprint("user_auth_controller", __name__)
 @user_auth_controller.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    email = data["email"]
-    password = data["password"]
+
+    validation_errors, validated_data = UserSchema.validate_request_data(
+        UserSchema(), data
+    )
+    if validation_errors:
+        return (
+            jsonify({"message": "Validation failed", "errors": validation_errors}),
+            400,
+        )
+    email = validated_data["email"]
+    password = validated_data["password"]
     try:
         result = UserAuthService.login(email=email, password=password)
         if result:
@@ -22,7 +32,7 @@ def login():
         response.set_cookie("refresh_token", result["refresh_token"], httponly=True)
         return response, 200
     except:
-        return jsonify({"message": "Internal server error"})
+        return jsonify({"message": "Internal server error"}), 500
 
 
 @user_auth_controller.route("/register", methods=["POST"])
