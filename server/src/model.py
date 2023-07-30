@@ -10,6 +10,7 @@ class User(db.Model):
     username = db.Column(db.String(250), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
     area_of_interest = db.Column(db.Integer, db.ForeignKey("interests.id"))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
@@ -23,6 +24,13 @@ class User(db.Model):
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
+
+
+class Role(db.Model):
+    __tablename__ = "roles"
+    name = db.Column(db.String(), unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
 
 class Interest(db.Model):
