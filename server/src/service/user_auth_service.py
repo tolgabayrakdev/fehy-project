@@ -30,7 +30,8 @@ class UserAuthService:
             db.session.add(user)
             db.session.commit()
             return user
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
+            print(e)
             db.session.rollback()
             raise InternalServerError(
                 description="Database error",
