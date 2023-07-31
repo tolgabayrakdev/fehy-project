@@ -11,7 +11,8 @@ class User(db.Model):
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
-    area_of_interest = db.Column(db.Integer, db.ForeignKey("interests.id"))
+    area_of_interest = db.relationship("Interest", backref="user_interest", lazy=True)
+    quotes = db.relationship("Quote", backref="user_quotes", lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
@@ -28,6 +29,7 @@ class User(db.Model):
 
 class Role(db.Model):
     __tablename__ = "roles"
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
@@ -37,7 +39,6 @@ class Interest(db.Model):
     __tablename__ = "interests"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    users = db.relationship("User", backref="interest", lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
@@ -48,3 +49,25 @@ class Interest(db.Model):
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
+
+
+class Quote(db.Model):
+    __tablename__ = "quotes"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+
+quote_user = db.Table(
+    "quote_user",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
+    db.Column("quote_id", db.Integer, db.ForeignKey("quotes.id")),
+)
+
+
+user_interest = db.Table(
+    "user_interest",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
+    db.Column("interest_id", db.Integer, db.ForeignKey("interests.id")),
+)
