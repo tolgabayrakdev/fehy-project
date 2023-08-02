@@ -30,8 +30,22 @@ class UserAuthService:
             db.session.add(user)
             db.session.commit()
             return user
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
+            print(e)
             db.session.rollback()
             raise InternalServerError(
                 description="Database error",
             )
+
+    @staticmethod
+    def change_password(email: str, current_password: str, new_password: str):
+        user = User.query.filter_by(email=email).first()
+        check_password = Helper.matchHashedText(current_password)
+        try:
+            if user and check_password:
+                hashed_password = Helper.generate_hash_password(new_password)
+                user.password = hashed_password
+                db.session.commit()
+            return {"success": True, "message": "Password changed."}
+        except SQLAlchemyError:
+            db.session.rollback(description="Database Error")
