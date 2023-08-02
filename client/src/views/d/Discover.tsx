@@ -1,11 +1,10 @@
-
 type Props = {}
 
 export default function Discover({ }: Props) {
   return (
     <div>
-     Discover
-
+    burala quoters
+    
     </div>
   )
 }
