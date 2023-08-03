@@ -6,6 +6,9 @@ import Login from "./views/auth/Login";
 import Register from "./views/auth/Register";
 import DiscoverLayout from "./layouts/DiscoverLayout";
 import Discover from "./views/d/Discover";
+import Settings from "./views/d/Settings";
+import QuotesLayout from "./layouts/QuotesLayout";
+import PopularQuotes from "./views/d/popular/PopularQuotes";
 
 
 
@@ -21,7 +24,13 @@ export default function Router() {
             path: "/d",
             element: <DiscoverLayout />,
             children: [
-                { path: "", element: <Discover /> }
+                {
+                    path: "", element: <QuotesLayout />, children: [
+                        { path: "", element: <Discover /> },
+                        { path: "best-favs", element: <PopularQuotes /> }
+                    ]
+                },
+                { path: "settings", element: <Settings /> }
             ]
         },
         {

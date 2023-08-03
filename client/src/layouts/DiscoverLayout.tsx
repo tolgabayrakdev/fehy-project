@@ -1,15 +1,20 @@
 import { Outlet } from "react-router-dom"
-import AuthWrapper from "../util/AuthWrapper"
+import Navbar from "../components/d/Navbar";
 
 type Props = {}
 function DiscoverLayout({ }: Props) {
     return (
         <>
-            <Outlet />
+            <Navbar />
+            <div className="ml-6 pt-20">
+                <div className="p-5 ml-10 mr-10">
+                    <Outlet />
+                </div>
+            </div>
         </>
     )
 }
 
 
 
-export default AuthWrapper(DiscoverLayout);
+export default DiscoverLayout;

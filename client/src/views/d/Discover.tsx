@@ -1,8 +1,10 @@
-
 type Props = {}
 
-export default function Discover({}: Props) {
+export default function Discover({ }: Props) {
   return (
-    <div>Discover</div>
+    <div>
+    burala quoters
+    
+    </div>
   )
 }
