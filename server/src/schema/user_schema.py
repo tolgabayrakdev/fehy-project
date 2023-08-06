@@ -9,6 +9,12 @@ class UserSchema(Schema):
     def validate_request_data(schema, data):
         try:
             result = schema.load(data)
-            return None, result  # Doğrulama başarılı, result içinde dönüştürülmüş veriler
+            return (
+                None,
+                result,
+            )  # Doğrulama başarılı, result içinde dönüştürülmüş veriler
         except ValidationError as error:
-            return error.messages, None  # Doğrulama hatası, error.messages içinde hata mesajları
+            return (
+                error.messages,
+                None,
+            )  # Doğrulama hatası, error.messages içinde hata mesajları
