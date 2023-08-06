@@ -6,8 +6,8 @@ function DiscoverLayout({ }: Props) {
     return (
         <>
             <Navbar />
-            <div className="ml-6 pt-20">
-                <div className="p-5 ml-10 mr-10">
+            <div className="ml-3 pt-16">
+                <div className="p-3 ml-10 mr-10 h-screen overflow-auto">
                     <Outlet />
                 </div>
             </div>
